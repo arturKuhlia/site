@@ -4,6 +4,8 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
  import { DatePipe } from '@angular/common';
  import { BlogService } from 'src/app/services/blog.service';
  import { Router, ActivatedRoute } from '@angular/router';
+ import { Subject } from 'rxjs';
+ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-blog-editor',
@@ -13,14 +15,28 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 })
 export class BlogEditorComponent implements OnInit {
   public Editor = ClassicEditor;
+  private unsubscribe$ = new Subject<void>();
   ckeConfig: any;
   postData = new Post();
   formTitle = 'Add';
   postId = '';
-  constructor(private route: ActivatedRoute,
+  constructor(
+   
+    private route: ActivatedRoute,
     private datePipe: DatePipe,
     private blogService: BlogService,
-    private router: Router) { }
+    private router: Router) {if (this.route.snapshot.params['id']) {
+      this.postId = this.route.snapshot.paramMap.get('id');
+      } }
+    
+
+
+
+      setPostFormData(postFormData) {
+        this.postData.title = postFormData.title;
+        this.postData.content = postFormData.content;
+        }
+        
   setEditorConfig() {
     this.ckeConfig = {
     removePlugins: ['ImageUpload', 'MediaEmbed'],
@@ -38,20 +54,43 @@ export class BlogEditorComponent implements OnInit {
     }
     };
     }
+    
   ngOnInit(): void {
     this.setEditorConfig();
+    if (this.postId) {
+      this.formTitle = 'Edit';
+      this.blogService.getPostbyId(this.postId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+      result => {
+      this.setPostFormData(result);
+      }
+      );
+      }
   }
 
   saveBlogPost() {
-    this.postData.createdDate = this.datePipe.transform(Date.now(), 'MMdd-yyyy HH:mm');
+    if (this.postId) {
+    this.blogService.updatePost(this.postId, this.postData).then(
+    () => {
+    this.router.navigate(['/']);
+    }
+    );
+    } else {
+    this.postData.createdDate = this.datePipe.transform(Date.now(), 'MM-dd-yyyy HH:mm');
     this.blogService.createPost(this.postData).then(
     () => {
     this.router.navigate(['/']);
     }
     );
     }
+    }
 
     cancel() {
       this.router.navigate(['/']);
+      }
+      ngOnDestroy() {
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
       }
 }

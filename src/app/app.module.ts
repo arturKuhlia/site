@@ -17,6 +17,7 @@ import { BlogEditorComponent } from './components/blog-editor/blog-editor.compon
 import { ExcerptPipe } from './customPipes/excerpt.pipe';
 import { SlugPipe } from './customPipes/slug.pipe';
 import { BlogCardComponent } from './components/blog-card/blog-card.component';
+import { BlogComponent } from './components/blog/blog.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { BlogCardComponent } from './components/blog-card/blog-card.component';
     ExcerptPipe,
     SlugPipe,
     BlogCardComponent,
+    BlogComponent,
 
   ],
   imports: [
@@ -37,9 +39,12 @@ import { BlogCardComponent } from './components/blog-card/blog-card.component';
     BrowserAnimationsModule,
     NgMaterialModule,
     RouterModule.forRoot([
+      { path: 'editpost/:id', component: BlogEditorComponent },
+      { path: 'blog/:id/:slug', component: BlogComponent },
       { path: 'addpost', component: BlogEditorComponent },
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: '**', component: HomeComponent }
+
     ]),
     FormsModule,
 

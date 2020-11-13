@@ -30,4 +30,17 @@ ref.orderBy('createdDate', 'desc'))
  }));}));
  return blogs;
  }
+ getPostbyId(id: string): Observable<Post> {
+  const blogDetails = this.db.doc<Post>('blogs/' + id).valueChanges();
+  return blogDetails;
+  }
+
+  updatePost(postId: string, post: Post) {
+    const putData = JSON.parse(JSON.stringify(post));
+    return this.db.doc('blogs/' + postId).update(putData);
+    }
+    
+ deletePost(postId: string) {
+  return this.db.doc('blogs/' + postId).delete();
+  }
 }
