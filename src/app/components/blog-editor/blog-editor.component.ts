@@ -6,6 +6,9 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
  import { Router, ActivatedRoute } from '@angular/router';
  import { Subject } from 'rxjs';
  import { takeUntil } from 'rxjs/operators';
+ import { AuthService } from 'src/app/services/auth.service';
+ import { AppUser } from 'src/app/models/appuser';
+
 
 @Component({
   selector: 'app-blog-editor',
@@ -14,6 +17,7 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   providers: [DatePipe]
 })
 export class BlogEditorComponent implements OnInit {
+  appUser: AppUser;
   public Editor = ClassicEditor;
   private unsubscribe$ = new Subject<void>();
   ckeConfig: any;
@@ -21,14 +25,17 @@ export class BlogEditorComponent implements OnInit {
   formTitle = 'Add';
   postId = '';
   constructor(
-   
+    private authService: AuthService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private blogService: BlogService,
-    private router: Router) {if (this.route.snapshot.params['id']) {
+    private router: Router)
+    {
+
+      if (this.route.snapshot.params['id']) {
       this.postId = this.route.snapshot.paramMap.get('id');
       } }
-    
+
 
 
 
@@ -36,7 +43,7 @@ export class BlogEditorComponent implements OnInit {
         this.postData.title = postFormData.title;
         this.postData.content = postFormData.content;
         }
-        
+
   setEditorConfig() {
     this.ckeConfig = {
     removePlugins: ['ImageUpload', 'MediaEmbed'],
@@ -54,8 +61,9 @@ export class BlogEditorComponent implements OnInit {
     }
     };
     }
-    
+
   ngOnInit(): void {
+
     this.setEditorConfig();
     if (this.postId) {
       this.formTitle = 'Edit';
@@ -67,6 +75,8 @@ export class BlogEditorComponent implements OnInit {
       }
       );
       }
+      this.authService.appUser$.subscribe(appUser => this.appUser =appUser);
+      this.postData.author = this.appUser.name;
   }
 
   saveBlogPost() {

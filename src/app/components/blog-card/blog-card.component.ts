@@ -6,7 +6,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { AppUser } from 'src/app/models/appuser';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-blog-card',
@@ -14,11 +15,17 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./blog-card.component.scss'],
 })
 export class BlogCardComponent implements OnInit {
+
+  appUser: AppUser;
   constructor(
+
+    private authService: AuthService,
     private blogService: BlogService,
     private route: ActivatedRoute,
     private snackBarService: SnackbarService
   ) {
+    this.authService.appUser$.subscribe(appUser => this.appUser = appUser);
+
     this.pageSizeOptions = [5, 10, 20];
     const pageSize = localStorage.getItem('pageSize');
     this.config = {
