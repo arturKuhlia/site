@@ -18,7 +18,8 @@ import { ExcerptPipe } from './customPipes/excerpt.pipe';
 import { SlugPipe } from './customPipes/slug.pipe';
 import { BlogCardComponent } from './components/blog-card/blog-card.component';
 import { BlogComponent } from './components/blog/blog.component';
-
+import { NgxPaginationModule } from 'ngx-pagination';
+import { PaginatorComponent } from './components/paginator/paginator.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,9 +30,11 @@ import { BlogComponent } from './components/blog/blog.component';
     SlugPipe,
     BlogCardComponent,
     BlogComponent,
+    PaginatorComponent,
 
   ],
   imports: [
+    NgxPaginationModule,
     CKEditorModule,
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -39,6 +42,7 @@ import { BlogComponent } from './components/blog/blog.component';
     BrowserAnimationsModule,
     NgMaterialModule,
     RouterModule.forRoot([
+      { path: 'page/:pagenum', component: HomeComponent },
       { path: 'editpost/:id', component: BlogEditorComponent },
       { path: 'blog/:id/:slug', component: BlogComponent },
       { path: 'addpost', component: BlogEditorComponent },

@@ -5,6 +5,8 @@ import { Post } from 'src/app/models/post';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-blog-card',
@@ -14,14 +16,30 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 export class BlogCardComponent implements OnInit {
   constructor(
     private blogService: BlogService,
- 
+    private route: ActivatedRoute,
     private snackBarService: SnackbarService
-  ) {}
+  ) {
+    this.pageSizeOptions = [5, 10, 20];
+    const pageSize = localStorage.getItem('pageSize');
+    this.config = {
+    currentPage: 1,
+    itemsPerPage: pageSize ? +pageSize : this.pageSizeOptions[0]
+    };}
   blogPost: Post[] = [];
   private unsubscribe$ = new Subject<void>();
+  config: any;
+  pageSizeOptions = [];
+
+
 
   ngOnInit() {
     this.getBlogPosts();
+    this.route.params.subscribe(
+      params => {
+      this.config.currentPage = +params['pagenum'];
+      this.getBlogPosts();
+      }
+      );
   }
   getBlogPosts() {
     this.blogService
@@ -46,5 +64,5 @@ ngOnDestroy() {
   this.unsubscribe$.next();
   this.unsubscribe$.complete();
   }
-  
+
 }
