@@ -63,7 +63,8 @@ export class BlogEditorComponent implements OnInit {
     }
 
   ngOnInit(): void {
-
+    this.authService.appUser$.subscribe(appUser => this.appUser =
+      appUser)
     this.setEditorConfig();
     if (this.postId) {
       this.formTitle = 'Edit';
@@ -75,11 +76,12 @@ export class BlogEditorComponent implements OnInit {
       }
       );
       }
-      this.authService.appUser$.subscribe(appUser => this.appUser =appUser);
+
       this.postData.author = this.appUser.name;
   }
 
   saveBlogPost() {
+    this.postData.author = this.appUser.name;
     if (this.postId) {
     this.blogService.updatePost(this.postId, this.postData).then(
     () => {
