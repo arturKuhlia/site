@@ -20,7 +20,7 @@ import { BlogCardComponent } from './components/blog-card/blog-card.component';
 import { BlogComponent } from './components/blog/blog.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PaginatorComponent } from './components/paginator/paginator.component'
-
+import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { AngularFireAuthModule } from "@angular/fire/auth"
 import { AuthGuard } from './guards/auth.guard';
 
@@ -49,6 +49,8 @@ import { AuthGuard } from './guards/auth.guard';
     BrowserAnimationsModule,
     NgMaterialModule,
     RouterModule.forRoot([
+      { path: 'editpost/:id', component: BlogEditorComponent, canActivate:
+[AdminAuthGuard] },
       { path: 'addpost', component: BlogEditorComponent, canActivate:
 [AuthGuard] },
       { path: 'page/:pagenum', component: HomeComponent },

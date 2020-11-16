@@ -17,7 +17,7 @@
         </mat-card-content>
         <mat-divider></mat-divider>
         <mat-card-actions align="end">
-          <ng-container *ngIf="appUser">
+          <ng-container   *ngIf="appUser?.isAdmin">
             <button mat-raised-button color="accent" [routerLink]="['/editpost', post.postId]">
               Edit
             </button>
