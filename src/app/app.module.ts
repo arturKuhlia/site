@@ -23,6 +23,8 @@ import { PaginatorComponent } from './components/paginator/paginator.component'
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { AngularFireAuthModule } from "@angular/fire/auth"
 import { AuthGuard } from './guards/auth.guard';
+import { ScrollerComponent } from './components/scroller/scroller.component';
+import { CommentsComponent } from './components/comments/comments.component';
 
 
 
@@ -37,6 +39,9 @@ import { AuthGuard } from './guards/auth.guard';
     BlogCardComponent,
     BlogComponent,
     PaginatorComponent,
+    ScrollerComponent,
+    CommentsComponent,
+
 
   ],
   imports: [
