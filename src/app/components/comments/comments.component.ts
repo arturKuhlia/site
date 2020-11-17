@@ -18,7 +18,8 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   @Input()
   blogId;
-
+  email;
+  commentedBy;
   appUser: AppUser;
   public comments = new Comments();
   commentList: Comments[] = [];
@@ -27,16 +28,22 @@ export class CommentsComponent implements OnInit, OnDestroy {
   constructor(private datePipe: DatePipe,
     private commentService: CommentService,
     private authService: AuthService,
-    private snackBarService: SnackbarService) { }
+    private snackBarService: SnackbarService) {
+
+
+     }
 
   ngOnInit() {
     this.authService.appUser$.subscribe(appUser => this.appUser = appUser);
     this.getAllComments();
+
   }
 
   onCommentPost(commentForm) {
     this.comments.commentDate = this.datePipe.transform(Date.now(), 'MM-dd-yyyy HH:mm:ss');
     this.comments.blogId = this.blogId;
+    this.comments.email = this.appUser.email;
+    this.comments.commentedBy= this.appUser.name;
     this.commentService.saveComment(this.comments).then(
       commentForm.resetForm()
     );

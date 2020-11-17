@@ -13,6 +13,7 @@ export class CommentService {
 
   saveComment(comment: Comments) {
     const commentData = JSON.parse(JSON.stringify(comment));
+    console.log(commentData)
     return this.db.collection('comments').add(commentData);
   }
 
