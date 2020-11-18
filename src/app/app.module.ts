@@ -25,7 +25,6 @@ import { ExcerptPipe } from './customPipes/excerpt.pipe';
 import { SlugPipe } from './customPipes/slug.pipe';
 import { SocialShareComponent } from './components/social-share/social-share.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
-import { AuthorProfileComponent } from './components/author-profile/author-profile.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 
@@ -47,7 +46,6 @@ const customConfig: ShareButtonsConfig = {
     SlugPipe,
     SocialShareComponent,
     PaginatorComponent,
-    AuthorProfileComponent,
   ],
   imports: [
     NgxPaginationModule,
