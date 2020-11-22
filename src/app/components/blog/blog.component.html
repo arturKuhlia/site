@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<div><ion-card><ion-title >{{postData.title}}</ion-title>
+  <ion-card-subtitle >
+    <i  aria-hidden="true"></i> {{postData.createdDate | date:'longDate'}}
+    <i  aria-hidden="true"></i> {{postData.author}}
+  </ion-card-subtitle>
+ <ion-card-content><div >
+    <div [innerHTML]="postData.content">
+    </div>
+  </div></ion-card-content>
+  </ion-card></div>
+ 
+  
+ 
+ 
+<app-comments [blogId]="postId"></app-comments>
+ 

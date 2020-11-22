@@ -1,0 +1,77 @@
+<ng-template #anonymousUser>
+  <ion-card class="comment-card ion-elevation-z2">
+    <a (click)="login()">Login with Google</a> to post comments
+  </ion-card>
+</ng-template>
+<ion-card
+  *ngIf="appUser; else anonymousUser"
+  class="comment-card ion-elevation-z2"
+>
+  <ion-card-title> LEAVE A REPLY </ion-card-title>
+  <ion-card-subtitle>
+    Your email address will not be published. Required fields are marked *
+  </ion-card-subtitle>
+  <ion-card-content>
+    <form
+      #commentForm="ngForm"
+      (ngSubmit)="commentForm.form.valid && onCommentPost(commentForm)"
+      novalidate
+    >
+
+
+      <ion-form-field class="full-width">
+        <ion-textarea
+          ionInput
+          placeholder="Comment"
+          name="content"
+          [(ngModel)]="comments.content"
+          #content="ngModel"
+          required
+        ></ion-textarea>
+        <ion-error *ngIf="commentForm.submitted && content.errors?.required"
+          >Comment is required</ion-error
+        >
+      </ion-form-field>
+      <ion-card-actions>
+        <ion-button
+          type="
+            submit"
+          ion-raised-button
+          color="primary"
+        >
+          Post Comment
+        </ion-button>
+      </ion-card-actions>
+    </form>
+  </ion-card-content>
+</ion-card>
+
+<ion-card
+  *ngFor="let comment of commentList"
+  class="comment-card ion-elevation-z2"
+>
+  <ion-card-title>
+    <div  >
+      
+      <div *ngIf="appUser?.isAdmin">
+        <ion-button
+          ion-icon-button
+          ionTooltip="Delete comment"
+          ionTooltipPosition="before"
+          color="danger"
+          size="small"
+          (click)="deleteComment(comment.commentId)"
+        >
+        <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </ion-card-title>
+
+  <ion-card-subtitle> Commented by <a>{{ comment.commentedBy }}</a>  on {{
+    comment.commentDate | date: "medium"
+  }}</ion-card-subtitle>
+  <ion-card-content>
+    <p>{{ comment.content }}</p>
+  </ion-card-content>
+</ion-card>

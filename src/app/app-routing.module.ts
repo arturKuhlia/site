@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'folder/Inbox',
-    pathMatch: 'full'
-  },
-  {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
-  }
-];
+import { HomeComponent } from './components/home/home.component';
+import { BlogEditorComponent } from './components/blog-editor/blog-editor.component';
+import { BlogComponent } from './components/blog/blog.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
+
+
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot([{ path: '', component: HomeComponent, pathMatch: 'full' },
+    { path: 'page/:pagenum', component: HomeComponent },
+    { path: 'addpost', component: BlogEditorComponent, canActivate: [AuthGuard] },
+    { path: 'editpost/:id', component: BlogEditorComponent, canActivate: [AdminAuthGuard] },
+    { path: 'blog/:id/:slug', component: BlogComponent },
+    { path: '**', component: HomeComponent }])
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

@@ -1,0 +1,31 @@
+ 
+
+
+<ng-template #emptyblog>
+  <div class="spinner-container">
+    <ion-spinner  name="dots" ></ion-spinner>
+  </div>
+</ng-template>
+<div *ngIf="blogPost && blogPost.length>0; else emptyblog">
+  <div *ngFor="let post of blogPost | paginate: config">
+    <a class="blog-title" [routerLink]="['/blog/', post.postId, post.title | slug]"> <ion-card class="blog-card ion-elevation-z2">
+      <ion-card-content>
+      
+          <ion-title>{{ post.title}} </ion-title>
+      
+      </ion-card-content>
+      <ion-card-content>
+        <div [innerHTML]="post.content | excerpt"></div>
+      </ion-card-content> 
+      <ion-card-actions  >
+        
+        <ng-container *ngIf="appUser?.isAdmin">
+          <ion-button   size="small"  [routerLink]="['/editpost',post.postId]">Edit</ion-button>
+          <ion-button  size="small" color="danger" (click)="delete(post.postId)">Delete</ion-button>
+        </ng-container>
+        
+      </ion-card-actions>
+    </ion-card>  </a>
+  </div> 
+  <app-paginator [pageSizeOptions]="pageSizeOptions" [config]="config"></app-paginator>
+</div>
